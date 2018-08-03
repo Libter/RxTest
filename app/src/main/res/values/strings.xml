@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RxTest</string>
+    <string name="error">Nie udało się pobrać listy repozytoriów.</string>
+</resources>
