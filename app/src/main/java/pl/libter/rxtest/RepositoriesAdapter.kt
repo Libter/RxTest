@@ -11,14 +11,18 @@ import pl.libter.rxtest.api.Repository
 
 class RepositoriesAdapter(context: Context, list: ArrayList<Repository>): ArrayAdapter<Repository>(context, 0, list) {
 
+    companion object {
+        fun fill(view: View, repository: Repository) {
+            view.findViewById<ImageView>(R.id.source).setImageResource(repository.source.icon)
+            view.findViewById<TextView>(R.id.name).text = repository.name
+            view.findViewById<TextView>(R.id.ownerName).text = repository.owner.name
+            view.findViewById<ImageView>(R.id.ownerAvatar).setImageBitmap(repository.owner.avatar)
+        }
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val row = convertView ?: LayoutInflater.from(context).inflate(R.layout.repository, parent, false)
-        val repository = getItem(position)
-        row.findViewById<ImageView>(R.id.source).setImageResource(repository.source.icon)
-        row.findViewById<TextView>(R.id.name).text = repository.name
-        row.findViewById<TextView>(R.id.ownerName).text = repository.owner.name
-        row.findViewById<ImageView>(R.id.ownerAvatar).setImageBitmap(repository.owner.avatar)
-        return row
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.repository, parent, false)
+        fill(view, getItem(position)); return view
     }
 
 }

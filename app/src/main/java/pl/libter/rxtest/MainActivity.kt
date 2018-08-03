@@ -1,6 +1,7 @@
 package pl.libter.rxtest
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ListView
 import android.widget.Toast
@@ -34,6 +35,12 @@ class MainActivity : Activity() {
                 repositoriesAdapter.notifyDataSetChanged()
             }
 
-        findViewById<ListView>(R.id.repositories).adapter = repositoriesAdapter
+        findViewById<ListView>(R.id.repositories).run {
+            adapter = repositoriesAdapter
+            setOnItemClickListener { adapter, view, position, id ->
+                DescriptionActivity.repository = adapter.getItemAtPosition(position) as Repository
+                startActivity(Intent(this@MainActivity, DescriptionActivity::class.java))
+            }
+        }
     }
 }
