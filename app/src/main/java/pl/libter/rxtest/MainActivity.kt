@@ -50,7 +50,7 @@ class MainActivity: AppCompatActivity() {
 
         findViewById<ListView>(R.id.repositories).run {
             adapter = repositoriesAdapter
-            setOnItemClickListener { adapter, view, position, id ->
+            setOnItemClickListener { adapter, _, position, _ ->
                 DescriptionActivity.repository = adapter.getItemAtPosition(position) as Repository
                 startActivity(Intent(this@MainActivity, DescriptionActivity::class.java))
             }

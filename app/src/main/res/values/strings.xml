@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">RxTest</string>
-    <string name="error">Nie udało się pobrać listy repozytoriów.</string>
-    <string name="menuRefresh">Odśwież</string>
-    <string name="menuSort">Przełącz sortowanie</string>
-</resources>

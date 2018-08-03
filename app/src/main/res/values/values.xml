@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">RxTest</string>
+    <string name="error">Nie udało się pobrać listy repozytoriów.</string>
+    <string name="menuRefresh">Odśwież</string>
+    <string name="menuSort">Przełącz sortowanie</string>
+
+    <dimen name="padding">8dp</dimen>
+    <dimen name="icon">48dp</dimen>
+    <dimen name="largeText">16sp</dimen>
+</resources>
