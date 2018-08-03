@@ -1,8 +1,11 @@
 package pl.libter.rxtest
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import io.reactivex.Observable
@@ -13,14 +16,24 @@ import pl.libter.rxtest.api.RepositoriesDownloader
 import pl.libter.rxtest.api.Repository
 import java.util.*
 
-class MainActivity : Activity() {
+class MainActivity: AppCompatActivity() {
+
+    private var sort = false
+    private val repositories = ArrayList<Repository>()
+    private lateinit var repositoriesAdapter: ArrayAdapter<Repository>
+
+    private fun applySort() {
+        repositories.sortWith(Comparator { r1, r2 ->
+            if (sort) r1.name.toLowerCase().compareTo(r2.name.toLowerCase()) else r1.id.compareTo(r2.id)
+        })
+        repositoriesAdapter.notifyDataSetChanged()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
 
-        val repositories = ArrayList<Repository>()
-        val repositoriesAdapter = RepositoriesAdapter(this, repositories)
+        repositoriesAdapter = RepositoriesAdapter(this, repositories)
 
         RxJavaPlugins.setErrorHandler {
             it.printStackTrace()
@@ -32,7 +45,7 @@ class MainActivity : Activity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 repositories.add(it)
-                repositoriesAdapter.notifyDataSetChanged()
+                applySort()
             }
 
         findViewById<ListView>(R.id.repositories).run {
@@ -43,4 +56,22 @@ class MainActivity : Activity() {
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.actionbar, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuSort -> {
+                sort = !sort
+                item.icon = resources.getDrawable(if (sort) R.drawable.sort_id else R.drawable.sort_name)
+                applySort()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 }

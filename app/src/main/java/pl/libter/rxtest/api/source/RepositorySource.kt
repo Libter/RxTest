@@ -11,6 +11,13 @@ import pl.libter.rxtest.api.Repository
 import pl.libter.rxtest.api.User
 
 sealed class RepositorySource {
+    companion object {
+        @JvmStatic
+        protected var repositoryId = 0
+            get() { field++; return field }
+            private set
+    }
+
     abstract val icon: Int
     protected abstract val url: String
     protected abstract fun getRepositories(response: String, emitter: ObservableEmitter<Repository>)
@@ -41,7 +48,7 @@ class GithubRepositorySource: RepositorySource() {
             val repository = array.getJSONObject(i)
             val owner = repository.getJSONObject("owner")
             emitter.onNext(Repository(
-                this, repository.getString("name"), repository.getString("description"),
+                repositoryId, this, repository.getString("name"), repository.getString("description"),
                 User(
                     owner.getString("login"),
                     getAvatar(owner.getString("avatar_url"))
@@ -61,7 +68,7 @@ class BitbucketRepositorySource: RepositorySource() {
             val repository = array.getJSONObject(i)
             val owner = repository.getJSONObject("owner")
             emitter.onNext(Repository(
-                this, repository.getString("name"), repository.getString("description"),
+                repositoryId, this, repository.getString("name"), repository.getString("description"),
                 User(
                     owner.getString("username"),
                     getAvatar(
